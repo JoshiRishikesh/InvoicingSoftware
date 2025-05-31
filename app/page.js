@@ -1,95 +1,88 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
 
-export default function Home() {
+import { useState, useEffect } from 'react';
+import Sidebar from './components/Navbar/Sidebar';
+import TopNavbar from './components/Navbar/TopNavbar';
+import { useTheme } from './context/ThemeContext';
+
+// Import Dashboard components as default imports
+import Cards from './components/Dashboard/cards';
+import Graphs from './components/Dashboard/graphs';
+import Table from './components/Dashboard/table';
+
+export default function HomePage() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const { theme } = useTheme();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
+
+  const isDark = theme === 'dark';
+  const pageBg = isDark ? '#121212' : '#f0f7f5';
+  const cardBg = isDark ? '#1e1e1e' : '#ffffff';
+  const textColor = isDark ? '#f8f9fa' : '#212529';
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div
+      className="d-flex"
+      style={{
+        backgroundColor: pageBg,
+        minHeight: '100vh',
+        transition: 'background-color 0.3s ease',
+      }}
+    >
+      {/* Sidebar */}
+      <Sidebar isOpen={isSidebarOpen} />
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      {/* Main Area */}
+      <div
+        className="flex-grow-1 d-flex flex-column"
+        style={{
+          marginLeft: isSidebarOpen && isDesktop ? '250px' : '0',
+          transition: 'margin-left 0.3s ease',
+          color: textColor,
+          minHeight: '100vh',
+        }}
+      >
+        {/* Top Navbar */}
+        <TopNavbar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+
+        {/* Content area */}
+        <main
+          className="flex-grow-1 p-4"
+          style={{
+            overflowY: 'auto',
+            paddingTop: '70px',
+          }}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <div className="container-lg">
+            {/* Use your imported components */}
+            <section className="mb-4" style={{ backgroundColor: cardBg, padding: '20px', borderRadius: '8px', border: isDark ? '1px solid #2c2c2c' : '1px solid #d1e7dd' }}>
+              <Cards />
+            </section>
+
+            <section className="mb-4" style={{ backgroundColor: cardBg, padding: '20px', borderRadius: '8px', border: isDark ? '1px solid #2c2c2c' : '1px solid #d1e7dd' }}>
+              <Graphs />
+            </section>
+
+            <section className="mb-4" style={{ backgroundColor: cardBg, padding: '20px', borderRadius: '8px', border: isDark ? '1px solid #2c2c2c' : '1px solid #d1e7dd' }}>
+              <Table />
+            </section>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

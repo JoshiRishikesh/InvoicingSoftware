@@ -3,10 +3,18 @@
   --foreground: #171717;
 }
 
+html {
+  color-scheme: light;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+  }
+
+  html {
+    color-scheme: dark;
   }
 }
 
@@ -35,8 +43,49 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-size: 12px;
   }
+
+  .d-print-none {
+    display: none !important;
+  }
+
+  .table {
+    font-size: 12px;
+  }
+
+  #printableArea {
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  table {
+    page-break-inside: auto;
+  }
+
+  tr, td, th {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+}
+/* Light Theme Placeholder */
+.input-light::placeholder {
+  color: #666;
+}
+
+/* Dark Theme Placeholder */
+.input-dark::placeholder {
+  color: #ccc;
 }
