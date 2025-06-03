@@ -7,11 +7,11 @@ Font.register({
   family: 'tajawal',
   fonts: [
     {
-      src: 'http://localhost:3000/fonts/Tajawal-Regular.ttf',
+      src: '/fonts/Tajawal-Regular.ttf',
       fontWeight: 'normal',
     },
     {
-      src: 'http://localhost:3000/fonts/Tajawal-Bold.ttf',
+      src: '/fonts/Tajawal-Bold.ttf',
       fontWeight: 'bold',
     },
   ],
